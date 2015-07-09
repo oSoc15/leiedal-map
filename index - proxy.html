@@ -67,14 +67,15 @@
       "esri/dijit/Geocoder",
       "esri/dijit/Popup",
       "esri/InfoTemplate",
-
+      "esri/layers/WMSLayer", 
+      "esri/config"
       "esri/layers/ArcGISDynamicMapServiceLayer",
       "esri/map",
       "esri/symbols/SimpleFillSymbol",
       "esri/symbols/SimpleLineSymbol", "dojo/domReady!"
     ], function(
       domConstruct, Color, Geocoder, Popup, InfoTemplate, 
-      ArcGISDynamicMapServiceLayer, Map, SimpleFillSymbol, SimpleLineSymbol
+      ArcGISDynamicMapServiceLayer, Map, SimpleFillSymbol, SimpleLineSymbol, WMSLayer, esriConfig, ArcGISDynamicMapServiceLayer
     ) {
       var sls = new SimpleLineSymbol("solid", new Color("#444444"), 3);
       var sfs = new SimpleFillSymbol("solid", sls, new Color([68, 68, 68, 0.25]));
@@ -85,18 +86,32 @@
         markerSymbol: null
       }, domConstruct.create("div"));
 
+      //Setting a proxy to handle WMS based maps
+
+                esriConfig.defaults.io.proxyUrl = "http://www.govmaps.eu/Proxy/proxy.ashx";
+
       map = new Map("ui-esri-map", {
         basemap: "topo",
-        center: [60.81993, 60.27764], // long, lat
+        center: [3.27764, 50.83993], // long, lat
         zoom: 12,
         sliderStyle: "small",
         infoWindow: popup
       });
 
 
+                //Adding the WMS baselayer
+
+                var wmsLayer = new WMSLayer("http://grb.agiv.be/geodiensten/raadpleegdiensten/GRB-basiskaart/wmsgr", {
+                    format: "png",
+                    visibleLayers: [2]
+                });
+
+                map.addLayer(wmsLayer);
+
+
       var energylabelLayer = new ArcGISDynamicMapServiceLayer("http://www.govmaps.eu/arcgis/rest/services/ICL/ICL_Energielabelatlas/MapServer", {
         "id": "energylabelLayer",
-        "opacity": 0.75
+        "opacity": 1
       });
       //energylabelLayer.setInfoTemplates({
         //0: { infoTemplate: _energylabelInfoTemplate }

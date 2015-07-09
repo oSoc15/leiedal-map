@@ -65,51 +65,36 @@
       "dojo/dom-construct",
       "esri/Color",
       "esri/dijit/Geocoder",
-      "esri/dijit/Popup",
-      "esri/InfoTemplate",
-
       "esri/layers/ArcGISDynamicMapServiceLayer",
       "esri/map",
-      "esri/symbols/SimpleFillSymbol",
-      "esri/symbols/SimpleLineSymbol", "dojo/domReady!"
+        "dojo/domReady!"
     ], function(
-      domConstruct, Color, Geocoder, Popup, InfoTemplate, 
-      ArcGISDynamicMapServiceLayer, Map, SimpleFillSymbol, SimpleLineSymbol
+        domConstruct,
+        Color, 
+        Geocoder,
+        ArcGISDynamicMapServiceLayer,
+        Map
     ) {
-      var sls = new SimpleLineSymbol("solid", new Color("#444444"), 3);
-      var sfs = new SimpleFillSymbol("solid", sls, new Color([68, 68, 68, 0.25]));
-
-      var popup = new Popup({
-        fillSymbol: sfs,
-        lineSymbol: null,
-        markerSymbol: null
-      }, domConstruct.create("div"));
-
+        
       map = new Map("ui-esri-map", {
         basemap: "topo",
-        center: [60.81993, 60.27764], // long, lat
-        zoom: 12,
-        sliderStyle: "small",
-        infoWindow: popup
+        center: [3.27764, 50.83993], // long, lat
+        zoom: 12
       });
 
 
       var energylabelLayer = new ArcGISDynamicMapServiceLayer("http://www.govmaps.eu/arcgis/rest/services/ICL/ICL_Energielabelatlas/MapServer", {
         "id": "energylabelLayer",
-        "opacity": 0.75
+        "opacity": 1
       });
-      //energylabelLayer.setInfoTemplates({
-        //0: { infoTemplate: _energylabelInfoTemplate }
-      //});
+        
       map.addLayer(energylabelLayer);
-
-      
+        var layer = L.esri.basemapLayer('DarkGray').addTo(map);
     });
 
   </script>
 </head>
 <body>
 <div id="ui-esri-map"></div>
-<div id="ui-esri-dijit-geocoder"></div>
 </body>
 </html>
