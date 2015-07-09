@@ -30,20 +30,20 @@
     <script>
         var map;
 
-        require(["ersi.geometry.Extent","esri/map", "esri/layers/WMSLayer", "esri/config", "esri/layers/ArcGISDynamicMapServiceLayer", "dojo/domReady!"],
+        require(["esri/map", "esri/layers/WMSLayer", "esri/config", "esri/layers/ArcGISDynamicMapServiceLayer", "dojo/domReady!"],
             function (Map, WMSLayer, esriConfig, ArcGISDynamicMapServiceLayer) {
 
                 //Setting a proxy to handle WMS based maps
 
-		//Add the proxy URL
+		        //Add the proxy URL
                 esriConfig.defaults.io.proxyUrl = "proxy";
                 esriConfig.defaults.io.alwaysUseProxy = false;
 
                 map = new Map("map", {
-                    basemap: "topo",
-                    center: [3.27764, 50.83993], // long, lat
-                    zoom: 12,
-                    sliderStyle: "small",
+                    basemap: "dark-gray",
+                    center: [3.27764, 50.81993],
+                    zoom: 10,
+                    sliderStyle: "small"
                 });
 
                 //Adding the WMS baselayer
@@ -61,8 +61,6 @@
                 });
 
                 map.addLayer(energylabelLayer);
-
-                var extent = map.extent;
 
             });
     </script>
