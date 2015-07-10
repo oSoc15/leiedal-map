@@ -1,100 +1,92 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-  <!--
-  Apple-Specific Meta Tag Keys
-  https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html#//apple_ref/doc/uid/TP40008193-SW2
-  -->
-  <!-- // Safari iOS apps only -->
-  <!-- Sets whether a web application runs in full-screen mode -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <!-- Sets the style of the status bar for a web application -->
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <!-- // Chrome for Android -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <title>ArcGIS dynamic and tile layers using Popup and InfoTemplates</title>
-  <link rel="stylesheet" href="http://js.arcgis.com/3.13/esri/css/esri.css">
-  <style>
-    html, body, #ui-esri-map {
-      width:   100%;
-      height:  100%;
-      margin:  0;
-      padding: 0;
-    }
+    <head>
+        <title>Energylabel</title>
+        <link rel="stylesheet" href="http://js.arcgis.com/3.13/esri/css/esri.css">
+        <link rel="stylesheet" href="css/map.css">
+        <script src="http://js.arcgis.com/3.13/"></script>
+        <script>
+            require([
+                    "esri/layers/ArcGISDynamicMapServiceLayer",
+                    "esri/layers/WMSLayer",
+                    "esri/layers/WMSLayerInfo",
+                    "esri/geometry/Extent",
+                    "esri/map",
+                    "dojo/domReady!"
+            ], function (ArcGISDynamicMapServiceLayer, WMSLayer, WMSLayerInfo, Extent, Map) {
 
-    #ui-esri-dijit-geocoder {
-      top:      20px;
-      left:     70px;
-      position: absolute;
-      z-index:  3;
-    }
+                /*
+                 *  MAP
+                 */
+                var map = new Map("map", {
+                    //basemap: "topo",
+                    zoom: 10,
+                    center: [3.27764, 50.81993],
+                    sliderStyle: "small",
+                    logo: false
+                });
 
-    .esriPopup .titlePane {
-      text-shadow: none;
-    }
+                /*
+                 *  Layers
+                 */
 
-    .esriPopup .titleButton.next {
-      right: 40px;
-    }
+                // GRB-layer
+                var grbLayerInfo = new WMSLayerInfo({
+                    name: 'GRB_BASISKAART',
+                    title: 'GRB'
+                });
 
-    .esriPopup .titleButton.prev {
-      right: 53px;
-    }
+                var resourceInfo = {
+                    extent: new Extent(12000, 143000, 269000, 255000, {
+                    wkid: 31370
+                    }),
+                    layerInfos: [grbLayerInfo]
+                };
 
-    .demographicInfoContent {
-      padding-top: 10px;
-    }
+                var grbLayer = new WMSLayer('http://grb.agiv.be/geodiensten/raadpleegdiensten/GRB-basiskaart/wmsgr?', {
+                    resourceInfo: resourceInfo,
+                    visibleLayers: ['GRB_BASISKAART']
+                });
 
-    .demographicInnerSpacing {
-      display: inline-block;
-      width:   8px;
-    }
+                map.addLayers([grbLayer]);
 
-    .demographicNumericPadding {
-      width:      90px;
-      display:    inline-block;
-      text-align: right;
-    }
-  </style>
-  <script src="http://js.arcgis.com/3.13/"></script>
-  <script>
-    var map;
-    require([
-      "dojo/dom-construct",
-      "esri/Color",
-      "esri/dijit/Geocoder",
-      "esri/layers/ArcGISDynamicMapServiceLayer",
-      "esri/map",
-        "dojo/domReady!"
-    ], function(
-        domConstruct,
-        Color, 
-        Geocoder,
-        ArcGISDynamicMapServiceLayer,
-        Map
-    ) {
-        
-      map = new Map("ui-esri-map", {
-        basemap: "topo",
-        center: [3.27764, 50.83993], // long, lat
-        zoom: 12
-      });
+                // Ortho-layer
+                var orthoLayerInfo = new WMSLayerInfo({
+                    name: 'Ortho',
+                    title: 'Ortho'
+                });
 
+                var resourceInfo = {
+                    // new Extent(xmin, ymin, ymax, ymax)
+                    extent: new Extent(22000, 150000, 259000, 245000, { wkid: 31370 }),
+                    layerInfos: [orthoLayerInfo]
+                };
 
-      var energylabelLayer = new ArcGISDynamicMapServiceLayer("http://www.govmaps.eu/arcgis/rest/services/ICL/ICL_Energielabelatlas/MapServer", {
-        "id": "energylabelLayer",
-        "opacity": 1
-      });
-        
-      map.addLayer(energylabelLayer);
-        var layer = L.esri.basemapLayer('DarkGray').addTo(map);
-    });
+                var orthoLayer = new WMSLayer('http://wms.agiv.be/ogc/wms/omkl?', {
+                    resourceInfo: resourceInfo,
+                    visibleLayers: ['Ortho']
+                });
+                map.addLayers([orthoLayer]);
 
-  </script>
-</head>
-<body>
-<div id="ui-esri-map"></div>
-</body>
+                //Energylabel layer
+                var energylabelLayerURL = "http://www.govmaps.eu/arcgis/rest/services/ICL/ICL_Energielabelatlas/MapServer";
+
+                var energylabelLayerOptions = {
+                    "id": "energylabelLayer",
+                    "opacity": 0.8,
+                    "showAttribution": false
+                };
+                var energylabelLayer = new ArcGISDynamicMapServiceLayer(energylabelLayerURL, energylabelLayerOptions);
+
+                var layerDefinitions = [];
+                layerDefinitions[2] = "LABEL = 'E'";
+                energylabelLayer.setLayerDefinitions(layerDefinitions);
+
+                map.addLayer(energylabelLayer);
+
+            });
+        </script>
+    </head>
+    <body>
+        <div id="map"></div>
+    </body>
 </html>
