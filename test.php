@@ -30,7 +30,7 @@ if (!empty($_GET['location'])) {
         $residence_info_array = json_decode($residence_info_json, true);
 
         if (!empty($residence_info_array['feature']['attributes'])) {
-            echo var_dump($residence_info_array['feature']['attributes']);
+            //echo var_dump($residence_info_array['feature']['attributes']);
         } else {
             echo 'no info over this house';
         }
@@ -100,6 +100,12 @@ if (!empty($_GET['location'])) {
                 opacity: 0.5,
                 'crs': crs
             }).addTo(map);
+            <?php if(!empty($residence_info_array['feature']['attributes'])){ ?>
+            var residence =  <?php echo json_encode($residence_info_array['feature']['attributes']) ?>; 
+            localStorage.setItem('residence', JSON.stringify(residence));
+            //var retrievedResidence = localStorage.getItem('residence');
+            //console.log('retrievedResidence: ', JSON.parse(retrievedResidence));
+            <?php  } ?>
         </script>
     </body>
 </html>
