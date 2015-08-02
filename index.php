@@ -50,14 +50,10 @@ if (!empty($_GET['location'])) {
 <!DOCTYPE html>
 <html>
     <head>
-        <title>PLONN</title>
-        <style>
-            #map {
-                width: 1400px;
-                height: 1000px;
-            }
-        </style>
+        <title>PLONG</title>
+        <link rel="stylesheet" href="css/map.css" />
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-1.0.0-b1/leaflet.css" />
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
         <script src="http://cdn.leafletjs.com/leaflet-1.0.0-b1/leaflet.js"></script>
         <script src="js/leafletesri.js"></script>
         <script src="js/leafletwms.js"></script>
@@ -65,46 +61,65 @@ if (!empty($_GET['location'])) {
         <script src="js/proj.js"></script>
     </head>
     <body>
-        <a href="#">bereken label</a> <!-- gaat naar de questionnaire -->
-        <form action="">
-            <input type="text" name="location" />
-            <button type="submit">submit</button>
-        </form>
-        <div id="map"></div>
-        <script>
+        <div id="landingmap">
+            <div id="search">
+                <!-- LOGO -->
+                <div id="logo">
+                    <img id="plong" src="assets/logo.svg" alt="logo">
+                </div>
 
-            var crs = new L.Proj.CRS("EPSG:31370",
-                    "+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 +lat_0=90 +lon_0=4.367486666666666 +x_0=150000.013 +y_0=5400088.438 +ellps=intl +towgs84=-106.868628,52.297783,-103.723893,0.336570,-0.456955,1.842183,-1.2747 +units=m +no_defs",
-                    {
-                        resolutions: [12000, 143000, 269000, 255000], // 3 example zoom level resolutions
-                    }
-            );
+                <!-- search a specific place in Belgium -->
+                <div id="searchbar">
+                    <input type="text" name="location" placeholder="Zoek uw adres"/>
 
-            var map = L.map('map').setView([<?php echo $lat; ?>, <?php echo $lon; ?>], <?php echo $zoom; ?>);
-            var tiles = L.WMS.tileLayer("http://grb.agiv.be/geodiensten/raadpleegdiensten/GRB-basiskaart/wmsgr?", {
-                'tileSize': 512,
-                'layers': 'GRB_BASISKAART',
-                'transparent': false,
-                'crs': crs
-            });
-            tiles.addTo(map);
-            var tiles2 = L.WMS.tileLayer("http://wms.agiv.be/ogc/wms/omkl?", {
-                'tileSize': 512,
-                'layers': 'Ortho',
-                'transparent': true
-            });
-            tiles2.addTo(map);
-            L.esri.dynamicMapLayer({
-                url: 'http://www.govmaps.eu/arcgis/rest/services/ICL/ICL_Energielabelatlas/MapServer',
-                opacity: 0.5,
-                'crs': crs
-            }).addTo(map);
-            <?php if(!empty($residence_info_array['feature']['attributes'])){ ?>
-            var residence =  <?php echo json_encode($residence_info_array['feature']['attributes']) ?>;
-            localStorage.setItem('residence', JSON.stringify(residence));
-            //var retrievedResidence = localStorage.getItem('residence');
-            //console.log('retrievedResidence: ', JSON.parse(retrievedResidence));
-            <?php  } ?>
-        </script>
+                    <!--<form action="">
+                        <input type="text" name="location" placeholder="Zoek uw adres"/>
+                    </form>-->
+                </div>
+                <div id="nav">
+                    <ul>
+                        <li><a>Berekenen</a></li>
+                        <li><a>Tips</a></li>
+                        <li><a>Help</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="map"></div>
+                <script>
+                    var crs = new L.Proj.CRS("EPSG:31370",
+                            "+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 +lat_0=90 +lon_0=4.367486666666666 +x_0=150000.013 +y_0=5400088.438 +ellps=intl +towgs84=-106.868628,52.297783,-103.723893,0.336570,-0.456955,1.842183,-1.2747 +units=m +no_defs",
+                            {
+                                resolutions: [12000, 143000, 269000, 255000], // 3 example zoom level resolutions
+                            }
+                    );
+
+                    var map = L.map('map').setView([<?php echo $lat; ?>, <?php echo $lon; ?>], <?php echo $zoom; ?>);
+                    var tiles = L.WMS.tileLayer("http://grb.agiv.be/geodiensten/raadpleegdiensten/GRB-basiskaart/wmsgr?", {
+                        'tileSize': 512,
+                        'layers': 'GRB_BASISKAART',
+                        'transparent': false,
+                        'crs': crs
+                    });
+                    tiles.addTo(map);
+                    var tiles2 = L.WMS.tileLayer("http://wms.agiv.be/ogc/wms/omkl?", {
+                        'tileSize': 512,
+                        'layers': 'Ortho',
+                        'transparent': true
+                    });
+                    tiles2.addTo(map);
+                    L.esri.dynamicMapLayer({
+                        url: 'http://www.govmaps.eu/arcgis/rest/services/ICL/ICL_Energielabelatlas/MapServer',
+                        opacity: 0.5,
+                        'crs': crs
+                    }).addTo(map);
+                    <?php if(!empty($residence_info_array['feature']['attributes'])){ ?>
+                    var residence =  <?php echo json_encode($residence_info_array['feature']['attributes']) ?>;
+                    localStorage.setItem('residence', JSON.stringify(residence));
+                    //var retrievedResidence = localStorage.getItem('residence');
+                    //console.log('retrievedResidence: ', JSON.parse(retrievedResidence));
+                    <?php  } ?>
+                </script>
+            </div>
+        </div>
     </body>
 </html>
