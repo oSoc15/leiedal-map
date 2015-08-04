@@ -5,12 +5,6 @@ body,
     font-family: 'Source Sans Pro';
 }
 
-#search{
-    height: 10%;
-    width: 100%;
-    background-color: #fff;
-}
-
 #map {
     background-color: #3E3E3E;
     position: absolute;
@@ -27,10 +21,6 @@ body,
     white-space: nowrap;
     margin-left: 1.2em;
     margin-top: .7em;
-}
-
-#plong{
-    width: 100px;
 }
 
 #searchbar{
@@ -51,35 +41,11 @@ body,
     text-align: center;
 }
 
-#searchbar input[type=text]:focus{
+#searchbar form input[type=text]:focus{
     background: #E0E0E0;
     outline: 0;
 }
 
-#searchbar input[type=text]::-webkit-input-placeholder{
+#searchbar form input[type=text]::-webkit-input-placeholder{
     color: #FFFFFF;
-}
-
-#nav{
-    width: 30%;
-    float: right;
-    font-size: 14pt;
-    text-transform: uppercase;
-    color: #C2C2C2;
-    line-height: 75px;
-    white-space: nowrap;
-}
-
-#nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-#nav li {
-    display: inline;
-}
-
-#nav a{
-    padding-right: 1em;
 }
